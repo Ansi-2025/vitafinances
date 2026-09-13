@@ -68,9 +68,9 @@ export type NamedRow = { id: string; name: string };
 
 export const useIncomes = (range?: Range) =>
   useQuery({
-    queryKey: ["incomes", range?.start ?? "all", range?.end ?? "all"],
+    queryKey: ["receitas", range?.start ?? "all", range?.end ?? "all"],
     queryFn: async () => {
-      let query = supabase.from("incomes").select("*").order("date", { ascending: false });
+      let query = supabase.from("receitas").select("*").order("date", { ascending: false });
       if (range) query = query.gte("date", range.start).lte("date", range.end);
       return unwrap(await query) as unknown as Income[];
     },
@@ -78,9 +78,9 @@ export const useIncomes = (range?: Range) =>
 
 export const useExpenses = (range?: Range) =>
   useQuery({
-    queryKey: ["expenses", range?.start ?? "all", range?.end ?? "all"],
+    queryKey: ["despesas", range?.start ?? "all", range?.end ?? "all"],
     queryFn: async () => {
-      let query = supabase.from("expenses").select("*").order("date", { ascending: false });
+      let query = supabase.from("despesas").select("*").order("date", { ascending: false });
       if (range) query = query.gte("date", range.start).lte("date", range.end);
       return unwrap(await query) as unknown as Expense[];
     },
@@ -88,26 +88,26 @@ export const useExpenses = (range?: Range) =>
 
 export const useInvestments = () =>
   useQuery({
-    queryKey: ["investments"],
+    queryKey: ["investimentos"],
     queryFn: async () =>
       unwrap(
-        await supabase.from("investments").select("*").order("investment_date", { ascending: false }),
+        await supabase.from("investimentos").select("*").order("investment_date", { ascending: false }),
       ) as unknown as Investment[],
   });
 
 export const useGoals = () =>
   useQuery({
-    queryKey: ["goals"],
+    queryKey: ["metas"],
     queryFn: async () =>
-      unwrap(await supabase.from("goals").select("*").order("created_at", { ascending: false })) as unknown as Goal[],
+      unwrap(await supabase.from("metas").select("*").order("created_at", { ascending: false })) as unknown as Goal[],
   });
 
 type ListTable =
-  | "income_categories"
-  | "expense_categories"
-  | "expense_subcategories"
-  | "payment_methods"
-  | "investment_types";
+  | "categorias_rendas"
+  | "categorias_despesas"
+  | "subcategorias_despesas"
+  | "metodos_pagamento"
+  | "tipos_investimentos";
 
 export const useNamedList = (table: ListTable) =>
   useQuery({
@@ -118,9 +118,9 @@ export const useNamedList = (table: ListTable) =>
 
 export const useProfile = () =>
   useQuery({
-    queryKey: ["profile"],
+    queryKey: ["perfil"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("*").maybeSingle();
+      const { data, error } = await supabase.from("perfis").select("*").maybeSingle();
       if (error) throw new Error(error.message);
       return data;
     },
@@ -128,9 +128,9 @@ export const useProfile = () =>
 
 export const useSettings = () =>
   useQuery({
-    queryKey: ["user_settings"],
+    queryKey: ["configuracoes_usuario"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("user_settings").select("*").maybeSingle();
+      const { data, error } = await supabase.from("configuracoes_usuario").select("*").maybeSingle();
       if (error) throw new Error(error.message);
       return data;
     },
@@ -138,9 +138,9 @@ export const useSettings = () =>
 
 export const useSubscription = () =>
   useQuery({
-    queryKey: ["subscription"],
+    queryKey: ["assinaturas"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("subscriptions").select("*").maybeSingle();
+      const { data, error } = await supabase.from("assinaturas").select("*").maybeSingle();
       if (error) throw new Error(error.message);
       return data;
     },
@@ -150,7 +150,7 @@ export const useIsAdmin = () =>
   useQuery({
     queryKey: ["is-admin"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("user_roles").select("role").eq("role", "admin");
+      const { data, error } = await supabase.from("papeis_usuarios").select("role").eq("role", "admin");
       if (error) throw new Error(error.message);
       return (data ?? []).length > 0;
     },

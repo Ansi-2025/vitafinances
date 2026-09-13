@@ -1,0 +1,127 @@
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { ArrowRight, Chrome, UserRound } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { friendlyError } from "@/lib/data";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/cadastro")({
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) throw redirect({ to: "/app/dashboard" });
+  },
+  component: RegisterPage,
+});
+
+function RegisterPage() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error("As palavras-passe não coincidem.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: name } },
+      });
+
+      if (error) throw error;
+      toast.success("Conta criada com sucesso. Pode entrar na sua conta.");
+      navigate({ to: "/login" });
+    } catch (error) {
+      toast.error(friendlyError(error instanceof Error ? error.message : "Falha ao criar conta."));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleSignup() {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/app/dashboard` },
+      });
+      if (error) throw error;
+    } catch (error) {
+      toast.error(friendlyError(error instanceof Error ? error.message : "Falha ao criar conta com Google."));
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
+      <Card className="w-full max-w-lg">
+        <CardHeader className="space-y-2 text-center">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <UserRound className="size-5" aria-hidden />
+          </div>
+          <CardTitle className="text-2xl">Criar conta</CardTitle>
+          <CardDescription>Comece a organizar a sua vida financeira em poucos minutos.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+              <Label htmlFor="name">Nome</Label>
+              <Input id="name" value={name} onChange={(event) => setName(event.target.value)} placeholder="João Silva" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">E-mail</Label>
+              <Input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="nome@exemplo.com" required />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="password">Palavra-passe</Label>
+                <Input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="••••••••" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirmar</Label>
+                <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="••••••••" required />
+              </div>
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "A criar conta..." : "Criar conta"}
+              <ArrowRight className="size-4" aria-hidden />
+            </Button>
+          </form>
+
+          <div className="relative my-5">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">Ou</span>
+            </div>
+          </div>
+
+          <Button type="button" variant="outline" className="w-full" onClick={handleGoogleSignup}>
+            <Chrome className="size-4" aria-hidden />
+            Continuar com Google
+          </Button>
+
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Já tem conta?{" "}
+            <Link to="/login" className="font-medium text-primary hover:underline">
+              Entrar
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

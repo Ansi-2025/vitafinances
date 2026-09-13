@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
+import { redirect } from "@tanstack/react-router";
+
 import { supabase } from "@/integrations/supabase/client";
 
 export function useSession() {
@@ -31,3 +33,28 @@ export type { User };
 /** Caminho relativo seguro para redirecionar após autenticação. */
 export const safeRedirect = (value: string | undefined | null, fallback = "/app/dashboard") =>
   value && value.startsWith("/") && !value.startsWith("//") ? value : fallback;
+
+export const requireSession = async () => {
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) {
+    throw redirect({ to: "/login" });
+  }
+};
+
+export const requireAdmin = async () => {
+  await requireSession();
+  const { data: userData } = await supabase.auth.getUser();
+  const userId = userData.user?.id;
+  if (!userId) throw redirect({ to: "/login" });
+
+  const { data, error } = await supabase
+    .from("papeis_usuarios")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+
+  if (error || !data) {
+    throw redirect({ to: "/login" });
+  }
+};

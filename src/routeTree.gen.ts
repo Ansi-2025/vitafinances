@@ -10,33 +10,306 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrecosRouteImport } from './routes/precos'
+import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
+import { Route as SimuladorRouteImport } from './routes/simulador'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppAnalisesRouteImport } from './routes/app/analises'
+import { Route as AppAssinaturaRouteImport } from './routes/app/assinatura'
+import { Route as AppComoFuncionaRouteImport } from './routes/app/como-funciona'
+import { Route as AppConfiguracoesRouteImport } from './routes/app/configuracoes'
+import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
+import { Route as AppGastosRouteImport } from './routes/app/gastos'
+import { Route as AppInvestimentosRouteImport } from './routes/app/investimentos'
+import { Route as AppMetasRouteImport } from './routes/app/metas'
+import { Route as AppPrevisoesRouteImport } from './routes/app/previsoes'
+import { Route as AppReceitasRouteImport } from './routes/app/receitas'
+import { Route as AppSimuladorRouteImport } from './routes/app/simulador'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComoFuncionaRoute = ComoFuncionaRouteImport.update({
+  id: '/como-funciona',
+  path: '/como-funciona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosRoute = PrecosRouteImport.update({
+  id: '/precos',
+  path: '/precos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
+  id: '/recuperar-senha',
+  path: '/recuperar-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimuladorRoute = SimuladorRouteImport.update({
+  id: '/simulador',
+  path: '/simulador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAnalisesRoute = AppAnalisesRouteImport.update({
+  id: '/analises',
+  path: '/analises',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAssinaturaRoute = AppAssinaturaRouteImport.update({
+  id: '/assinatura',
+  path: '/assinatura',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppComoFuncionaRoute = AppComoFuncionaRouteImport.update({
+  id: '/como-funciona',
+  path: '/como-funciona',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConfiguracoesRoute = AppConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGastosRoute = AppGastosRouteImport.update({
+  id: '/gastos',
+  path: '/gastos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInvestimentosRoute = AppInvestimentosRouteImport.update({
+  id: '/investimentos',
+  path: '/investimentos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMetasRoute = AppMetasRouteImport.update({
+  id: '/metas',
+  path: '/metas',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPrevisoesRoute = AppPrevisoesRouteImport.update({
+  id: '/previsoes',
+  path: '/previsoes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReceitasRoute = AppReceitasRouteImport.update({
+  id: '/receitas',
+  path: '/receitas',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSimuladorRoute = AppSimuladorRouteImport.update({
+  id: '/simulador',
+  path: '/simulador',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
+  '/cadastro': typeof CadastroRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
+  '/precos': typeof PrecosRoute
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/simulador': typeof SimuladorRoute
+  '/app/analises': typeof AppAnalisesRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
+  '/app/como-funciona': typeof AppComoFuncionaRoute
+  '/app/configuracoes': typeof AppConfiguracoesRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/gastos': typeof AppGastosRoute
+  '/app/investimentos': typeof AppInvestimentosRoute
+  '/app/metas': typeof AppMetasRoute
+  '/app/previsoes': typeof AppPrevisoesRoute
+  '/app/receitas': typeof AppReceitasRoute
+  '/app/simulador': typeof AppSimuladorRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
+  '/precos': typeof PrecosRoute
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/simulador': typeof SimuladorRoute
+  '/app/analises': typeof AppAnalisesRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
+  '/app/como-funciona': typeof AppComoFuncionaRoute
+  '/app/configuracoes': typeof AppConfiguracoesRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/gastos': typeof AppGastosRoute
+  '/app/investimentos': typeof AppInvestimentosRoute
+  '/app/metas': typeof AppMetasRoute
+  '/app/previsoes': typeof AppPrevisoesRoute
+  '/app/receitas': typeof AppReceitasRoute
+  '/app/simulador': typeof AppSimuladorRoute
+  '/admin': typeof AdminIndexRoute
+  '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/app': typeof AppRouteWithChildren
+  '/cadastro': typeof CadastroRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/faq': typeof FaqRoute
+  '/login': typeof LoginRoute
+  '/precos': typeof PrecosRoute
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/simulador': typeof SimuladorRoute
+  '/app/analises': typeof AppAnalisesRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
+  '/app/como-funciona': typeof AppComoFuncionaRoute
+  '/app/configuracoes': typeof AppConfiguracoesRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/gastos': typeof AppGastosRoute
+  '/app/investimentos': typeof AppInvestimentosRoute
+  '/app/metas': typeof AppMetasRoute
+  '/app/previsoes': typeof AppPrevisoesRoute
+  '/app/receitas': typeof AppReceitasRoute
+  '/app/simulador': typeof AppSimuladorRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/cadastro'
+    | '/como-funciona'
+    | '/faq'
+    | '/login'
+    | '/precos'
+    | '/recuperar-senha'
+    | '/simulador'
+    | '/app/analises'
+    | '/app/assinatura'
+    | '/app/como-funciona'
+    | '/app/configuracoes'
+    | '/app/dashboard'
+    | '/app/gastos'
+    | '/app/investimentos'
+    | '/app/metas'
+    | '/app/previsoes'
+    | '/app/receitas'
+    | '/app/simulador'
+    | '/admin/'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/cadastro'
+    | '/como-funciona'
+    | '/faq'
+    | '/login'
+    | '/precos'
+    | '/recuperar-senha'
+    | '/simulador'
+    | '/app/analises'
+    | '/app/assinatura'
+    | '/app/como-funciona'
+    | '/app/configuracoes'
+    | '/app/dashboard'
+    | '/app/gastos'
+    | '/app/investimentos'
+    | '/app/metas'
+    | '/app/previsoes'
+    | '/app/receitas'
+    | '/app/simulador'
+    | '/admin'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/app'
+    | '/cadastro'
+    | '/como-funciona'
+    | '/faq'
+    | '/login'
+    | '/precos'
+    | '/recuperar-senha'
+    | '/simulador'
+    | '/app/analises'
+    | '/app/assinatura'
+    | '/app/como-funciona'
+    | '/app/configuracoes'
+    | '/app/dashboard'
+    | '/app/gastos'
+    | '/app/investimentos'
+    | '/app/metas'
+    | '/app/previsoes'
+    | '/app/receitas'
+    | '/app/simulador'
+    | '/admin/'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
+  CadastroRoute: typeof CadastroRoute
+  ComoFuncionaRoute: typeof ComoFuncionaRoute
+  FaqRoute: typeof FaqRoute
+  LoginRoute: typeof LoginRoute
+  PrecosRoute: typeof PrecosRoute
+  RecuperarSenhaRoute: typeof RecuperarSenhaRoute
+  SimuladorRoute: typeof SimuladorRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +321,216 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/como-funciona': {
+      id: '/como-funciona'
+      path: '/como-funciona'
+      fullPath: '/como-funciona'
+      preLoaderRoute: typeof ComoFuncionaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precos': {
+      id: '/precos'
+      path: '/precos'
+      fullPath: '/precos'
+      preLoaderRoute: typeof PrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar-senha': {
+      id: '/recuperar-senha'
+      path: '/recuperar-senha'
+      fullPath: '/recuperar-senha'
+      preLoaderRoute: typeof RecuperarSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulador': {
+      id: '/simulador'
+      path: '/simulador'
+      fullPath: '/simulador'
+      preLoaderRoute: typeof SimuladorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/analises': {
+      id: '/app/analises'
+      path: '/analises'
+      fullPath: '/app/analises'
+      preLoaderRoute: typeof AppAnalisesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/assinatura': {
+      id: '/app/assinatura'
+      path: '/assinatura'
+      fullPath: '/app/assinatura'
+      preLoaderRoute: typeof AppAssinaturaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/como-funciona': {
+      id: '/app/como-funciona'
+      path: '/como-funciona'
+      fullPath: '/app/como-funciona'
+      preLoaderRoute: typeof AppComoFuncionaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/configuracoes': {
+      id: '/app/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/app/configuracoes'
+      preLoaderRoute: typeof AppConfiguracoesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/gastos': {
+      id: '/app/gastos'
+      path: '/gastos'
+      fullPath: '/app/gastos'
+      preLoaderRoute: typeof AppGastosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/investimentos': {
+      id: '/app/investimentos'
+      path: '/investimentos'
+      fullPath: '/app/investimentos'
+      preLoaderRoute: typeof AppInvestimentosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/metas': {
+      id: '/app/metas'
+      path: '/metas'
+      fullPath: '/app/metas'
+      preLoaderRoute: typeof AppMetasRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/previsoes': {
+      id: '/app/previsoes'
+      path: '/previsoes'
+      fullPath: '/app/previsoes'
+      preLoaderRoute: typeof AppPrevisoesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/receitas': {
+      id: '/app/receitas'
+      path: '/receitas'
+      fullPath: '/app/receitas'
+      preLoaderRoute: typeof AppReceitasRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/simulador': {
+      id: '/app/simulador'
+      path: '/simulador'
+      fullPath: '/app/simulador'
+      preLoaderRoute: typeof AppSimuladorRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AppRouteChildren {
+  AppAnalisesRoute: typeof AppAnalisesRoute
+  AppAssinaturaRoute: typeof AppAssinaturaRoute
+  AppComoFuncionaRoute: typeof AppComoFuncionaRoute
+  AppConfiguracoesRoute: typeof AppConfiguracoesRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppGastosRoute: typeof AppGastosRoute
+  AppInvestimentosRoute: typeof AppInvestimentosRoute
+  AppMetasRoute: typeof AppMetasRoute
+  AppPrevisoesRoute: typeof AppPrevisoesRoute
+  AppReceitasRoute: typeof AppReceitasRoute
+  AppSimuladorRoute: typeof AppSimuladorRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAnalisesRoute: AppAnalisesRoute,
+  AppAssinaturaRoute: AppAssinaturaRoute,
+  AppComoFuncionaRoute: AppComoFuncionaRoute,
+  AppConfiguracoesRoute: AppConfiguracoesRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppGastosRoute: AppGastosRoute,
+  AppInvestimentosRoute: AppInvestimentosRoute,
+  AppMetasRoute: AppMetasRoute,
+  AppPrevisoesRoute: AppPrevisoesRoute,
+  AppReceitasRoute: AppReceitasRoute,
+  AppSimuladorRoute: AppSimuladorRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
+  CadastroRoute: CadastroRoute,
+  ComoFuncionaRoute: ComoFuncionaRoute,
+  FaqRoute: FaqRoute,
+  LoginRoute: LoginRoute,
+  PrecosRoute: PrecosRoute,
+  RecuperarSenhaRoute: RecuperarSenhaRoute,
+  SimuladorRoute: SimuladorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
