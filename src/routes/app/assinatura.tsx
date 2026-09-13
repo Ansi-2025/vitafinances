@@ -14,23 +14,23 @@ const plans = [
   {
     key: "free",
     name: "Gratuito",
-    price: "€0",
+    price: "R$ 0",
     description: "Para começar a organizar a sua carteira com os básicos.",
     features: ["Receitas e gastos", "Dashboard inicial", "Metas básicas"],
   },
   {
     key: "pro",
     name: "Pro",
-    price: "€19",
+    price: "R$ 19,90",
     description: "Para quem quer mais controlo e previsões financeiras.",
-    features: ["Tudo do gratuito", "Previsões", "Análises avançadas"],
+    features: ["Tudo do gratuito", "Previsões", "Análises avançadas", "Ajuda da IA para interpretar os seus dados"],
   },
   {
     key: "premium",
     name: "Premium",
-    price: "€39",
+    price: "R$ 87,90",
     description: "Para gestão familiar, objetivos e visão de longo prazo.",
-    features: ["Tudo do Pro", "Perfil familiar", "Suporte prioritário"],
+    features: ["Tudo do Pro", "Perfil familiar", "Suporte prioritário", "Assistente de IA para decisões financeiras inteligentes"],
   },
 ] as const;
 
@@ -55,7 +55,7 @@ function SubscriptionPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Assinatura" description="Gerir o teu plano e as funcionalidades disponíveis no Patrimo." />
+      <PageHeader title="Assinatura" description="Gerir o teu plano e as funcionalidades disponíveis na VITA FINANCES." />
 
       <SectionCard title="Plano atual" description="Estado da sua conta e benefícios ativos.">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

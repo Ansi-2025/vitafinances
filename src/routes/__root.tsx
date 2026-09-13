@@ -7,11 +7,13 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode, useState } from "react";
+import { toast } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -78,14 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Patrimo" },
-      { name: "description", content: "Patrimo — gestão financeira pessoal e familiar." },
-      { name: "author", content: "Patrimo" },
-      { property: "og:title", content: "Patrimo" },
-      { property: "og:description", content: "Patrimo — gestão financeira pessoal e familiar." },
+      { title: "VITA FINANCES" },
+      { name: "description", content: "VITA FINANCES — gestão financeira pessoal e familiar." },
+      { name: "author", content: "VITA FINANCES" },
+      { property: "og:title", content: "VITA FINANCES" },
+      { property: "og:description", content: "VITA FINANCES — gestão financeira pessoal e familiar." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Patrimo" },
+      { name: "twitter:site", content: "@VITAFINANCES" },
     ],
     links: [
       {
@@ -117,6 +119,61 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const [sessionReady, setSessionReady] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const initializeSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (mounted) {
+        setSessionReady(true);
+        if (!data.session && router.state.location.pathname !== "/login" && router.state.location.pathname !== "/cadastro") {
+          router.navigate({ to: "/login", replace: true });
+        }
+      }
+    };
+
+    void initializeSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
+      if (!mounted) return;
+
+      if (event === "SIGNED_OUT") {
+        toast.info("Sessão encerrada. A voltar para a página de entrada...");
+        if (router.state.location.pathname !== "/login" && router.state.location.pathname !== "/cadastro") {
+          router.navigate({ to: "/login", replace: true });
+        }
+        return;
+      }
+
+      setSessionReady(true);
+
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED") {
+        router.invalidate();
+      }
+    });
+
+    return () => {
+      mounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
+
+  if (!sessionReady) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Toaster position="top-right" richColors closeButton />
+        <div className="flex min-h-screen items-center justify-center bg-background px-4">
+          <div className="text-center">
+            <div className="mx-auto mb-4 size-10 animate-spin rounded-full border-2 border-primary border-t-transparent" aria-hidden />
+            <p className="text-sm text-muted-foreground">A validar a sua sessão...</p>
+          </div>
+        </div>
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

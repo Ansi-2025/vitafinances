@@ -204,6 +204,8 @@ export const friendlyError = (message: string) => {
   if (/duplicate key/i.test(message)) return "Este registo já existe.";
   if (/permission|policy|row-level/i.test(message)) return "Não tem permissão para esta ação.";
   if (/Invalid login credentials/i.test(message)) return "E-mail ou palavra-passe incorretos.";
+  if (/Email not confirmed|email not confirmed/i.test(message))
+    return "Ainda não confirmaste o teu e-mail. Verifica a tua caixa de entrada e clica no link de confirmação antes de entrar.";
   if (/User already registered/i.test(message)) return "Já existe uma conta com este e-mail.";
   if (/network|fetch/i.test(message)) return "Falha de ligação. Tente novamente.";
   return message || "Algo correu mal. Tente novamente.";

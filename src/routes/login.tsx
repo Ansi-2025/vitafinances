@@ -1,6 +1,6 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Chrome, LockKeyhole, Mail } from "lucide-react";
+import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +23,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,15 +41,25 @@ function LoginPage() {
     }
   }
 
-  async function handleGoogleLogin() {
+  async function handleResendConfirmation() {
+    if (!email.trim()) {
+      toast.error("Indique o seu e-mail para receber a confirmação.");
+      return;
+    }
+
+    setResending(true);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: `${window.location.origin}/app/dashboard` },
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: email.trim(),
       });
+
       if (error) throw error;
+      toast.success("E-mail de confirmação enviado. Verifica a tua caixa de entrada.");
     } catch (error) {
-      toast.error(friendlyError(error instanceof Error ? error.message : "Falha no login com Google."));
+      toast.error(friendlyError(error instanceof Error ? error.message : "Falha ao reenviar confirmação."));
+    } finally {
+      setResending(false);
     }
   }
 
@@ -95,25 +106,24 @@ function LoginPage() {
                 required
               />
             </div>
+
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="link"
+                className="h-auto p-0 text-xs text-primary"
+                disabled={!email.trim() || resending}
+                onClick={handleResendConfirmation}
+              >
+                {resending ? "A enviar confirmação..." : "Reenviar confirmação por e-mail"}
+              </Button>
+            </div>
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "A entrar..." : "Entrar"}
               <ArrowRight className="size-4" aria-hidden />
             </Button>
           </form>
-
-          <div className="relative my-5">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Ou</span>
-            </div>
-          </div>
-
-          <Button type="button" variant="outline" className="w-full" onClick={handleGoogleLogin}>
-            <Chrome className="size-4" aria-hidden />
-            Continuar com Google
-          </Button>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Ainda não tem conta?{" "}

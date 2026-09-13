@@ -46,7 +46,7 @@ function LandingPage() {
             <Wallet className="size-4" aria-hidden />
           </div>
           <div>
-            <p className="font-display text-xl">Patrimo</p>
+            <p className="font-display text-xl">VITA FINANCES</p>
           </div>
         </div>
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">

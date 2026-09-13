@@ -1,6 +1,6 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Chrome, UserRound } from "lucide-react";
+import { ArrowRight, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,24 +43,14 @@ function RegisterPage() {
       });
 
       if (error) throw error;
-      toast.success("Conta criada com sucesso. Pode entrar na sua conta.");
+      toast.success(
+        "Conta criada com sucesso! Para concluir o registo, confirma o teu e-mail na caixa de entrada e depois volta a entrar na plataforma.",
+      );
       navigate({ to: "/login" });
     } catch (error) {
       toast.error(friendlyError(error instanceof Error ? error.message : "Falha ao criar conta."));
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function handleGoogleSignup() {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: `${window.location.origin}/app/dashboard` },
-      });
-      if (error) throw error;
-    } catch (error) {
-      toast.error(friendlyError(error instanceof Error ? error.message : "Falha ao criar conta com Google."));
     }
   }
 
@@ -99,20 +89,6 @@ function RegisterPage() {
               <ArrowRight className="size-4" aria-hidden />
             </Button>
           </form>
-
-          <div className="relative my-5">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Ou</span>
-            </div>
-          </div>
-
-          <Button type="button" variant="outline" className="w-full" onClick={handleGoogleSignup}>
-            <Chrome className="size-4" aria-hidden />
-            Continuar com Google
-          </Button>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
             Já tem conta?{" "}

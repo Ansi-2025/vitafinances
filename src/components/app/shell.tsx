@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -99,6 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { data: profile } = useProfile();
 
   async function signOut() {
+    toast.info("A sair da sua conta...");
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
@@ -112,7 +114,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Coins className="size-4" aria-hidden />
           </span>
-          <span className="font-display text-lg">Patrimo</span>
+          <span className="font-display text-lg">VITA FINANCES</span>
         </Link>
         <div className="flex-1 overflow-y-auto">
           <NavLinks />
@@ -136,7 +138,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72 overflow-y-auto bg-sidebar p-4">
-              <SheetTitle className="mb-6 font-display text-lg">Patrimo</SheetTitle>
+              <SheetTitle className="mb-6 font-display text-lg">VITA FINANCES</SheetTitle>
               <NavLinks onNavigate={() => setOpen(false)} />
               <Button variant="ghost" className="mt-6 w-full justify-start gap-3" onClick={signOut}>
                 <LogOut className="size-4" aria-hidden />
@@ -144,7 +146,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Button>
             </SheetContent>
           </Sheet>
-          <span className="font-display text-base">Patrimo</span>
+          <span className="font-display text-base">VITA FINANCES</span>
           <span className="size-9" />
         </header>
 

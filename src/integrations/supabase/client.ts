@@ -28,6 +28,39 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 }
 
 
+export function hasSupabaseConfig() {
+  const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'] || process.env['SUPABASE_URL'];
+  const SUPABASE_PUBLISHABLE_KEY = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_PUBLISHABLE_KEY'];
+
+  return Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
+}
+
+function createSupabaseStubClient() {
+  const message =
+    'Supabase não configurado. Adicione VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY no arquivo .env.local para habilitar autenticação e dados.';
+
+  const emptySubscription = {
+    unsubscribe() {
+      return undefined;
+    },
+  };
+
+  return {
+    auth: {
+      getSession: async () => ({ data: { session: null }, error: null }),
+      getUser: async () => ({ data: { user: null }, error: null }),
+      onAuthStateChange: () => ({ data: { subscription: emptySubscription } }),
+      signInWithPassword: async () => ({ data: null, error: new Error(message) }),
+      signUp: async () => ({ data: null, error: new Error(message) }),
+      resend: async () => ({ data: null, error: new Error(message) }),
+      signOut: async () => ({ error: null }),
+    },
+    from: () => {
+      throw new Error(message);
+    },
+  } as unknown as ReturnType<typeof createClient<Database>>;
+}
+
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
   // Fall back to process.env for SSR (server-side rendering)
@@ -40,8 +73,8 @@ function createSupabaseClient() {
       ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
     ];
     const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    console.warn(`[Supabase] ${message}`);
+    return createSupabaseStubClient();
   }
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

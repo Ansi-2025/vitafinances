@@ -12,7 +12,7 @@ function PricingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <Link to="/" className="font-display text-2xl">Patrimo</Link>
+        <Link to="/" className="font-display text-2xl">VITA FINANCES</Link>
         <Button variant="ghost" asChild>
           <Link to="/login">Entrar</Link>
         </Button>
@@ -28,7 +28,7 @@ function PricingPage() {
           <Card>
             <CardHeader>
               <CardTitle>Free</CardTitle>
-              <p className="text-3xl font-semibold">€0</p>
+              <p className="text-3xl font-semibold">R$ 0</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-3 text-sm text-muted-foreground">
@@ -47,7 +47,7 @@ function PricingPage() {
           <Card className="border-primary/30 bg-primary/5">
             <CardHeader>
               <CardTitle>Premium</CardTitle>
-              <p className="text-3xl font-semibold">R$ 29<span className="text-base text-muted-foreground">/mês</span></p>
+              <p className="text-3xl font-semibold">R$ 87,90<span className="text-base text-muted-foreground">/mês</span></p>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-3 text-sm text-muted-foreground">
@@ -55,7 +55,7 @@ function PricingPage() {
                 <li className="flex gap-2"><Check className="mt-0.5 size-4 text-emerald-600" aria-hidden /> Metas ilimitadas</li>
                 <li className="flex gap-2"><Check className="mt-0.5 size-4 text-emerald-600" aria-hidden /> Investimentos</li>
                 <li className="flex gap-2"><Check className="mt-0.5 size-4 text-emerald-600" aria-hidden /> Previsões e projeções</li>
-                <li className="flex gap-2"><Check className="mt-0.5 size-4 text-emerald-600" aria-hidden /> Perfil familiar</li>
+                <li className="flex gap-2"><Check className="mt-0.5 size-4 text-emerald-600" aria-hidden /> Assistente de IA para acompanhar a sua evolução</li>
               </ul>
               <Button className="w-full" asChild>
                 <Link to="/cadastro">

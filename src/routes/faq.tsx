@@ -8,7 +8,7 @@ export const Route = createFileRoute("/faq")({
 });
 
 const faq = [
-  { q: "Como funciona o Patrimo?", a: "Você registra receitas, gastos e investimentos e o sistema calcula saldo, percentuais, metas e previsões em tempo real." },
+  { q: "Como funciona a VITA FINANCES?", a: "Você registra receitas, gastos e investimentos e o sistema calcula saldo, percentuais, metas e previsões em tempo real." },
   { q: "Os dados são seguros?", a: "Sim. O projeto usa Supabase com autenticação e policies de acesso por utilizador, garantindo que cada pessoa veja apenas os seus dados." },
   { q: "Posso usar o simulador sem conta?", a: "Sim. O simulador público permite testar cenários sem criar conta, mas para guardar dados você precisará de um utilizador." },
   { q: "Quais planos existem?", a: "Há uma versão gratuita com o essencial e uma versão premium com metas ilimitadas, previsões, investimentos e perfil familiar." },
@@ -19,7 +19,7 @@ function FaqPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <Link to="/" className="font-display text-2xl">Patrimo</Link>
+        <Link to="/" className="font-display text-2xl">VITA FINANCES</Link>
         <div className="flex items-center gap-2">
           <Button variant="ghost" asChild>
             <Link to="/login">Entrar</Link>

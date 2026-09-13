@@ -19,7 +19,7 @@ function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <Link to="/" className="font-display text-2xl">Patrimo</Link>
+        <Link to="/" className="font-display text-2xl">VITA FINANCES</Link>
         <div className="flex items-center gap-2">
           <Button variant="ghost" asChild>
             <Link to="/login">Entrar</Link>

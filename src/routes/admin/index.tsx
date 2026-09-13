@@ -13,16 +13,16 @@ function AdminOverviewPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SectionCard title="Utilizadores" description="Total registados">
-          <p className="text-2xl font-semibold text-foreground">1.248</p>
+          <p className="text-2xl font-semibold text-foreground">0</p>
         </SectionCard>
         <SectionCard title="Ativos" description="Utilizadores ativos">
-          <p className="text-2xl font-semibold text-foreground">736</p>
+          <p className="text-2xl font-semibold text-foreground">0</p>
         </SectionCard>
         <SectionCard title="Assinaturas" description="Ativas no momento">
-          <p className="text-2xl font-semibold text-foreground">198</p>
+          <p className="text-2xl font-semibold text-foreground">0</p>
         </SectionCard>
         <SectionCard title="Receita estimada" description="Mês em curso">
-          <p className="text-2xl font-semibold text-foreground">R$ 12.400</p>
+          <p className="text-2xl font-semibold text-foreground">R$ 0,00</p>
         </SectionCard>
       </div>
     </div>

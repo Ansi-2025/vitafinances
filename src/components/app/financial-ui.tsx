@@ -18,7 +18,7 @@ export function PageHeader({
   return (
     <div className="flex flex-col gap-4 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">Patrimo</p>
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">VITA FINANCES</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{title}</h1>
         {description ? <p className="mt-2 text-sm text-muted-foreground">{description}</p> : null}
       </div>
