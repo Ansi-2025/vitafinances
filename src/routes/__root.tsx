@@ -11,9 +11,8 @@ import { useEffect, type ReactNode, useState } from "react";
 import { toast } from "sonner";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { hasSupabaseConfig, supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -40,9 +39,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -80,21 +76,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "VITA FINANCES" },
-      { name: "description", content: "VITA FINANCES — gestão financeira pessoal e familiar." },
-      { name: "author", content: "VITA FINANCES" },
-      { property: "og:title", content: "VITA FINANCES" },
-      { property: "og:description", content: "VITA FINANCES — gestão financeira pessoal e familiar." },
+      { title: "Vita Finances | Gestão financeira" },
+      { name: "description", content: "Vita Finances — gestão financeira pessoal e familiar com visão clara de receitas, gastos, metas e investimentos." },
+      { name: "author", content: "Vita Finances" },
+      { property: "og:title", content: "Vita Finances | Gestão financeira" },
+      { property: "og:description", content: "Vita Finances — gestão financeira pessoal e familiar com visão clara de receitas, gastos, metas e investimentos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@VITAFINANCES" },
+      { name: "twitter:site", content: "@VitaFinances" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/favicon.svg" },
     ],
   }),
   shellComponent: RootShell,
@@ -124,6 +121,11 @@ function RootComponent() {
 
   useEffect(() => {
     let mounted = true;
+
+    if (!hasSupabaseConfig()) {
+      setSessionReady(true);
+      return;
+    }
 
     const initializeSession = async () => {
       const { data } = await supabase.auth.getSession();

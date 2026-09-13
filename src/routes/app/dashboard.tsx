@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowDownCircle, ArrowUpCircle, PiggyBank, Wallet } from "lucide-react";
 
 import { PageHeader, SectionCard, StatCard, EmptyState } from "@/components/app/financial-ui";
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/app/dashboard")({
 });
 
 function DashboardPage() {
+  const navigate = useNavigate();
   const { data: incomes = [] } = useIncomes();
   const { data: expenses = [] } = useExpenses();
   const { data: investments = [] } = useInvestments();
@@ -34,7 +35,7 @@ function DashboardPage() {
           title="Comece organizando sua vida financeira."
           description="Cadastre a sua primeira receita, registe um gasto e defina a sua primeira meta."
           actionLabel="Adicionar receita"
-          actionHref="/app/receitas"
+          onAction={() => navigate({ to: "/app/receitas", search: { openAdd: true } })}
         />
       </div>
     );

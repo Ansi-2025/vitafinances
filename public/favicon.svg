@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Vita Finances icon">
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="26" fill="#0b0f17"/>
+  <rect x="12" y="12" width="104" height="104" rx="22" fill="url(#bg)" opacity="0.18"/>
+  <path d="M36 81.5V48.5C36 42.7 40.7 38 46.5 38H81.5C87.3 38 92 42.7 92 48.5V81.5C92 87.3 87.3 92 81.5 92H46.5C40.7 92 36 87.3 36 81.5Z" fill="#0b0f17" stroke="#d1fae5" stroke-width="4"/>
+  <path d="M52 70L60 62L69 71L80 60" stroke="#d1fae5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M76 60H80V64" stroke="#d1fae5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M46 77H82" stroke="#7dd3fc" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+</svg>

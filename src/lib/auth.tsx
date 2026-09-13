@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { redirect } from "@tanstack/react-router";
 
-import { supabase } from "@/integrations/supabase/client";
+import { hasSupabaseConfig, supabase } from "@/integrations/supabase/client";
 
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null);
@@ -35,6 +35,8 @@ export const safeRedirect = (value: string | undefined | null, fallback = "/app/
   value && value.startsWith("/") && !value.startsWith("//") ? value : fallback;
 
 export const requireSession = async () => {
+  if (!hasSupabaseConfig()) return;
+
   const { data } = await supabase.auth.getSession();
   if (!data.session) {
     throw redirect({ to: "/login" });
@@ -42,6 +44,8 @@ export const requireSession = async () => {
 };
 
 export const requireAdmin = async () => {
+  if (!hasSupabaseConfig()) return;
+
   await requireSession();
   const { data: userData } = await supabase.auth.getUser();
   const userId = userData.user?.id;

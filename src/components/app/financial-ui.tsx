@@ -98,11 +98,13 @@ export function EmptyState({
   description,
   actionLabel,
   actionHref,
+  onAction,
 }: {
   title: string;
   description: string;
   actionLabel?: string;
   actionHref?: string;
+  onAction?: () => void;
 }) {
   return (
     <Card>
@@ -112,13 +114,20 @@ export function EmptyState({
         </div>
         <h3 className="text-lg font-semibold text-foreground">{title}</h3>
         <p className="mt-2 max-w-md text-sm text-muted-foreground">{description}</p>
-        {actionLabel && actionHref ? (
-          <Button asChild className="mt-5">
-            <a href={actionHref}>
+        {actionLabel && (actionHref || onAction) ? (
+          actionHref ? (
+            <Button asChild className="mt-5">
+              <a href={actionHref}>
+                {actionLabel}
+                <ArrowRight className="size-4" aria-hidden />
+              </a>
+            </Button>
+          ) : (
+            <Button className="mt-5" type="button" onClick={onAction}>
               {actionLabel}
               <ArrowRight className="size-4" aria-hidden />
-            </a>
-          </Button>
+            </Button>
+          )
         ) : null}
       </CardContent>
     </Card>

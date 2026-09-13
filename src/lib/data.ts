@@ -4,6 +4,31 @@ import { toast } from "sonner";
 
 type Range = { start: string; end: string };
 
+const LOCAL_STORAGE_KEY_PREFIX = "vita-finances";
+
+const readLocalCollection = <T,>(key: string, fallback: T[] = []): T[] => {
+  if (typeof window === "undefined") return fallback;
+
+  try {
+    const raw = window.localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}:${key}`);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw) as T[];
+    return Array.isArray(parsed) ? parsed : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const writeLocalCollection = <T,>(key: string, value: T[]) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}:${key}`, JSON.stringify(value));
+  } catch {
+    // Ignore local storage write errors in restricted environments.
+  }
+};
+
 const unwrap = <T,>(result: { data: T | null; error: { message: string } | null }): T => {
   if (result.error) throw new Error(result.error.message);
   return (result.data ?? []) as T;
@@ -70,6 +95,10 @@ export const useIncomes = (range?: Range) =>
   useQuery({
     queryKey: ["receitas", range?.start ?? "all", range?.end ?? "all"],
     queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return readLocalCollection<Income>("receitas");
+      }
+
       let query = supabase.from("receitas").select("*").order("date", { ascending: false });
       if (range) query = query.gte("date", range.start).lte("date", range.end);
       return unwrap(await query) as unknown as Income[];
@@ -80,6 +109,10 @@ export const useExpenses = (range?: Range) =>
   useQuery({
     queryKey: ["despesas", range?.start ?? "all", range?.end ?? "all"],
     queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return readLocalCollection<Expense>("despesas");
+      }
+
       let query = supabase.from("despesas").select("*").order("date", { ascending: false });
       if (range) query = query.gte("date", range.start).lte("date", range.end);
       return unwrap(await query) as unknown as Expense[];
@@ -89,17 +122,27 @@ export const useExpenses = (range?: Range) =>
 export const useInvestments = () =>
   useQuery({
     queryKey: ["investimentos"],
-    queryFn: async () =>
-      unwrap(
+    queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return readLocalCollection<Investment>("investimentos");
+      }
+
+      return unwrap(
         await supabase.from("investimentos").select("*").order("investment_date", { ascending: false }),
-      ) as unknown as Investment[],
+      ) as unknown as Investment[];
+    },
   });
 
 export const useGoals = () =>
   useQuery({
     queryKey: ["metas"],
-    queryFn: async () =>
-      unwrap(await supabase.from("metas").select("*").order("created_at", { ascending: false })) as unknown as Goal[],
+    queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return readLocalCollection<Goal>("metas");
+      }
+
+      return unwrap(await supabase.from("metas").select("*").order("created_at", { ascending: false })) as unknown as Goal[];
+    },
   });
 
 type ListTable =
@@ -112,14 +155,23 @@ type ListTable =
 export const useNamedList = (table: ListTable) =>
   useQuery({
     queryKey: [table],
-    queryFn: async () =>
-      unwrap(await supabase.from(table).select("id, name").order("name")) as unknown as NamedRow[],
+    queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return readLocalCollection<NamedRow>(table, []);
+      }
+
+      return unwrap(await supabase.from(table).select("id, name").order("name")) as unknown as NamedRow[];
+    },
   });
 
 export const useProfile = () =>
   useQuery({
     queryKey: ["perfil"],
     queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return { id: "local-user", name: "Utilizador local", email: "local@vita-finances.com" };
+      }
+
       const { data, error } = await supabase.from("perfis").select("*").maybeSingle();
       if (error) throw new Error(error.message);
       return data;
@@ -130,6 +182,10 @@ export const useSettings = () =>
   useQuery({
     queryKey: ["configuracoes_usuario"],
     queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return { theme: "dark" };
+      }
+
       const { data, error } = await supabase.from("configuracoes_usuario").select("*").maybeSingle();
       if (error) throw new Error(error.message);
       return data;
@@ -140,6 +196,10 @@ export const useSubscription = () =>
   useQuery({
     queryKey: ["assinaturas"],
     queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return { plan: "gratis" };
+      }
+
       const { data, error } = await supabase.from("assinaturas").select("*").maybeSingle();
       if (error) throw new Error(error.message);
       return data;
@@ -150,6 +210,10 @@ export const useIsAdmin = () =>
   useQuery({
     queryKey: ["is-admin"],
     queryFn: async () => {
+      if (!hasSupabaseConfig()) {
+        return true;
+      }
+
       const { data, error } = await supabase.from("papeis_usuarios").select("role").eq("role", "admin");
       if (error) throw new Error(error.message);
       return (data ?? []).length > 0;
@@ -165,6 +229,17 @@ export function useSaveRow<T extends Record<string, unknown>>(
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: T & { id?: string }) => {
+      if (!hasSupabaseConfig()) {
+        const key = table;
+        const current = readLocalCollection<Record<string, unknown>>(key, []);
+        const { id, ...values } = payload;
+        const next = id
+          ? current.map((item) => (item.id === id ? { ...item, ...values, id } : item))
+          : [...current, { ...values, id: id ?? crypto.randomUUID() }];
+        writeLocalCollection(key, next);
+        return true;
+      }
+
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
       if (!userId) throw new Error("Sessão expirada. Entre novamente.");
@@ -188,6 +263,15 @@ export function useDeleteRow(table: string, invalidate: string[]) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!hasSupabaseConfig()) {
+        const current = readLocalCollection<Record<string, unknown>>(table, []);
+        writeLocalCollection(
+          table,
+          current.filter((item) => item.id !== id),
+        );
+        return true;
+      }
+
       const { error } = await supabase.from(table as never).delete().eq("id", id);
       if (error) throw new Error(error.message);
       return true;
